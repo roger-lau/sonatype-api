@@ -1,0 +1,16 @@
+{
+  "name": "sonatype-api",
+  "version": "1.0.0",
+  "description": "Sonatype API",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "author": "Roger L.",
+  "license": "MIT",
+  "dependencies": {
+    "jsonpath": "^1.0.2",
+    "superagent": "^6.1.0",
+    "yargs": "^16.1.1"
+  }
+}
