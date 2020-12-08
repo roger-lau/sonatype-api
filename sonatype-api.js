@@ -3,7 +3,7 @@
  *  Created Date: 1 Dec 2020
  *  Last Updated: 3 Dec 2020
  *  Purpose: To create/update/delete applications and manage their role access in Nexus IQ Server using APIs.
- *  Usage: node sonatype-api-app.js --u admin --p admin123 --serverURL http://localhost:8070 --orgName 'Department H' --appId 'app-1' --memberName 'roger.lau'
+ *  Usage: node sonatype-api.js --u admin --p admin123 --serverURL http://localhost:8070 --orgName 'Department H' --appId 'app-1' --memberName 'roger.lau'
  */
 
 // APIs
@@ -12,6 +12,7 @@ const APP_API = "/api/v2/applications";
 const GET_APP_INFO_API = "/api/v2/applications?publicId={appId}";
 const UPDATE_ORG_API = "/api/v2/applications/{appInternalId}/move/organization/{orgId}";
 const ASSIGN_MEMBER_API = "/api/v2/roleMemberships/organization/{orgId}/role/{roleId}/user/{memberName}";
+const ASSIGN_GROUP_API = "/api/v2/roleMemberships/organization/{orgId}/role/{roleId}/group/{memberName}";
 
 // Allow self-signed TLS certificate in IQ Server (not recommended for production)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -98,7 +99,7 @@ function assignMember(orgId, memberName) {
     // Id of the owner role is always the same
     const ownerId = "1cddabf7fdaa47d6833454af10e0a3ef"; 
 
-
+    // Assign member as owner
     request.put(serverURL + ASSIGN_MEMBER_API.replace("{orgId}", orgId).replace("{roleId}", ownerId).replace("{memberName}", memberName)).auth(userName, password).set(CONTENT_TYPE, APPLICATION_JSON)
         .then(response => {
             const body = response.body;
@@ -106,6 +107,16 @@ function assignMember(orgId, memberName) {
         }).catch(error => {
             exitWithError(JSON.stringify(error, null, 2));
         });
+
+    // Assign group as owner
+    request.put(serverURL + ASSIGN_GROUP_API.replace("{orgId}", orgId).replace("{roleId}", ownerId).replace("{memberName}", memberName)).auth(userName, password).set(CONTENT_TYPE, APPLICATION_JSON)
+        .then(response => {
+            const body = response.body;
+
+        }).catch(error => {
+            exitWithError(JSON.stringify(error, null, 2));
+        });
+
 }
 
 function updateOrg(orgId, appId) {
