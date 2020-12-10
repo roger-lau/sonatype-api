@@ -3,7 +3,7 @@
  *  Created Date: 1 Dec 2020
  *  Last Updated: 3 Dec 2020
  *  Purpose: To create/update/delete applications and manage their role access in Nexus IQ Server using APIs.
- *  Usage: node sonatype-api.js --u admin --p admin123 --serverURL http://localhost:8070 --orgName 'Department H' --appId 'app-1' --memberName 'roger.lau'
+ *  Usage: node sonatype-api.js --u admin --p admin123 --serverURL http://localhost:8070 --orgName 'Department H' --appId 'app-1' --memberName 'roger.lau' --groupName 'ITSC-0G400'
  */
 
 // APIs
@@ -22,6 +22,7 @@ const request = require('superagent');
 
 // Query json
 const jp = require('jsonpath');
+const { group } = require('yargs');
 
 // Read input arguments
 const args = require('yargs').argv;
@@ -32,6 +33,7 @@ var serverURL = args.serverURL;
 const orgName = args.orgName;
 const appId = args.appId;
 const memberName = args.memberName;
+const groupName = args.groupName;
 
 // Text Constants
 const CONTENT_TYPE = "Content-Type";
@@ -44,13 +46,14 @@ const isDebug = false;
 if (isInputEmpty(serverURL)) serverURL = "http://localhost:8070";
 
 // Check if arguments exist and not empty (it is TRUE value when argument is empty)
-if (isInputEmpty(orgName) || isInputEmpty(appId) || isInputEmpty(userName) || isInputEmpty(password) || isInputEmpty(memberName)) {
+if (isInputEmpty(orgName) || isInputEmpty(appId) || isInputEmpty(userName) || isInputEmpty(password) || isInputEmpty(memberName) || isInputEmpty(groupName)) {
     var errorMessage = "\n";
     if (isInputEmpty(orgName)) errorMessage += "Missing argument: --orgName\n";
     if (isInputEmpty(appId)) errorMessage += "Missing argument: --appId\n";
     if (isInputEmpty(userName)) errorMessage += "Missing argument: --u\n";
     if (isInputEmpty(password)) errorMessage += "Missing argument: --p\n";
     if (isInputEmpty(memberName)) errorMessage += "Missing argument: --memberName\n";
+    if (isInputEmpty(groupName)) errorMessage += "Missing argument: --groupName\n";
 
     exitWithError(errorMessage);
 }
@@ -79,7 +82,7 @@ function main() {
                         console.log("New organization created.");
                         console.log(response.body);
                         const newOrgId = response.body.id;
-                        assignMember(newOrgId, memberName);
+                        assignMember(newOrgId);
                         createApp(newOrgId, appId);
 
                     }).catch(error => {
@@ -95,11 +98,12 @@ function main() {
         });;
 }
 
-function assignMember(orgId, memberName) {
+function assignMember(orgId) {
     // Id of the owner role is always the same
     const ownerId = "1cddabf7fdaa47d6833454af10e0a3ef"; 
 
     // Assign member as owner
+    if(!isInputEmpty(memberName)) {
     request.put(serverURL + ASSIGN_MEMBER_API.replace("{orgId}", orgId).replace("{roleId}", ownerId).replace("{memberName}", memberName)).auth(userName, password).set(CONTENT_TYPE, APPLICATION_JSON)
         .then(response => {
             const body = response.body;
@@ -107,8 +111,10 @@ function assignMember(orgId, memberName) {
         }).catch(error => {
             exitWithError(JSON.stringify(error, null, 2));
         });
+    }
 
     // Assign group as owner
+    if(!isInputEmpty(groupName)) {
     request.put(serverURL + ASSIGN_GROUP_API.replace("{orgId}", orgId).replace("{roleId}", ownerId).replace("{memberName}", memberName)).auth(userName, password).set(CONTENT_TYPE, APPLICATION_JSON)
         .then(response => {
             const body = response.body;
@@ -116,6 +122,7 @@ function assignMember(orgId, memberName) {
         }).catch(error => {
             exitWithError(JSON.stringify(error, null, 2));
         });
+    }
 
 }
 
