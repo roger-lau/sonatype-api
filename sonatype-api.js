@@ -12,7 +12,7 @@ const APP_API = "/api/v2/applications";
 const GET_APP_INFO_API = "/api/v2/applications?publicId={appId}";
 const UPDATE_ORG_API = "/api/v2/applications/{appInternalId}/move/organization/{orgId}";
 const ASSIGN_MEMBER_API = "/api/v2/roleMemberships/organization/{orgId}/role/{roleId}/user/{memberName}";
-const ASSIGN_GROUP_API = "/api/v2/roleMemberships/organization/{orgId}/role/{roleId}/group/{memberName}";
+const ASSIGN_GROUP_API = "/api/v2/roleMemberships/organization/{orgId}/role/{roleId}/group/{groupName}";
 
 // Allow self-signed TLS certificate in IQ Server (not recommended for production)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -115,7 +115,7 @@ function assignMember(orgId) {
 
     // Assign group as owner
     if(!isInputEmpty(groupName)) {
-    request.put(serverURL + ASSIGN_GROUP_API.replace("{orgId}", orgId).replace("{roleId}", ownerId).replace("{memberName}", memberName)).auth(userName, password).set(CONTENT_TYPE, APPLICATION_JSON)
+    request.put(serverURL + ASSIGN_GROUP_API.replace("{orgId}", orgId).replace("{roleId}", ownerId).replace("{groupName}", groupName)).auth(userName, password).set(CONTENT_TYPE, APPLICATION_JSON)
         .then(response => {
             const body = response.body;
 
