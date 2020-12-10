@@ -1,0 +1,17 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    // cmd + shift + b to run
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run script",
+            "type": "shell",
+            "command": "node sonatype-api.js --u admin --p admin123 --serverURL http://localhost:8070 --orgName 'Department X' --appId 'app-1' --memberName 'roger.lau'",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
