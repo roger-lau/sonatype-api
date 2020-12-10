@@ -7,7 +7,7 @@
         {
             "label": "Run script",
             "type": "shell",
-            "command": "node sonatype-api.js --u admin --p admin123 --serverURL http://localhost:8070 --orgName 'Department X' --appId 'app-1' --memberName 'roger.lau'",
+            "command": "node sonatype-api.js --u admin --p admin123 --serverURL http://localhost:8070 --orgName 'Department X' --appId 'app-1' --memberName 'roger.lau'  --groupName 'ITSC-0G400'",
             "group": {
                 "kind": "build",
                 "isDefault": true
