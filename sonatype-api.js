@@ -1,7 +1,7 @@
 /*
  *  Created By: Roger L.
  *  Created Date: 1 Dec 2020
- *  Last Updated: 3 Dec 2020
+ *  Last Updated: 10 Dec 2020
  *  Purpose: To create/update/delete applications and manage their role access in Nexus IQ Server using APIs.
  *  Usage: node sonatype-api.js --u admin --p admin123 --serverURL http://localhost:8070 --orgName 'Department H' --appId 'app-1' --memberName 'roger.lau' --groupName 'ITSC-0G400'
  */
