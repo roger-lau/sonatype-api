@@ -95,7 +95,7 @@ function main() {
 
         }).catch(error => {
             exitWithError(JSON.stringify(error, null, 2));
-        });;
+        });
 }
 
 function assignMember(orgId) {
